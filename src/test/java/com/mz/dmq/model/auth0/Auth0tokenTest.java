@@ -1,0 +1,20 @@
+package com.mz.dmq.model.auth0;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class Auth0tokenTest {
+    private static final String TOKEN_TYPE = "Bearer";
+
+    @Test
+    public void testMapToken() throws JsonProcessingException {
+        String tokenValue = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImJGM3M4UUZidEhKU0dwZnBkZFlBaSJ9.eyJpc3MiOiJodHRwczovL216YXJhZ296YS51cy5hdXRoMC5jb20vIiwic3ViIjoic2xzSERDMTJLeXk5dGF5dURqVnVlN0pJdDBHRzN5NlVAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vbXphcmFnb3phLnVzLmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNjE2Njk4ODI2LCJleHAiOjE2MTY3ODUyMjYsImF6cCI6InNsc0hEQzEyS3l5OXRheXVEalZ1ZTdKSXQwR0czeTZVIiwic2NvcGUiOiJyZWFkOmNsaWVudF9ncmFudHMgY3JlYXRlOmNsaWVudF9ncmFudHMgcmVhZDp1c2VycyBjcmVhdGU6dXNlcnMgcmVhZDp1c2Vyc19hcHBfbWV0YWRhdGEgY3JlYXRlOnVzZXJzX2FwcF9tZXRhZGF0YSByZWFkOnVzZXJfY3VzdG9tX2Jsb2NrcyBjcmVhdGU6dXNlcl9jdXN0b21fYmxvY2tzIGNyZWF0ZTp1c2VyX3RpY2tldHMgcmVhZDpjbGllbnRzIHJlYWQ6Y2xpZW50X2tleXMgcmVhZDpjb25uZWN0aW9ucyByZWFkOnJlc291cmNlX3NlcnZlcnMgcmVhZDpkZXZpY2VfY3JlZGVudGlhbHMgcmVhZDpydWxlcyByZWFkOnJ1bGVzX2NvbmZpZ3MgcmVhZDpob29rcyByZWFkOmFjdGlvbnMgcmVhZDplbWFpbF9wcm92aWRlciByZWFkOnN0YXRzIHJlYWQ6dGVuYW50X3NldHRpbmdzIHJlYWQ6bG9ncyByZWFkOmxvZ3NfdXNlcnMgcmVhZDpzaGllbGRzIHJlYWQ6YW5vbWFseV9ibG9ja3MgcmVhZDp0cmlnZ2VycyByZWFkOmdyYW50cyByZWFkOmd1YXJkaWFuX2ZhY3RvcnMgcmVhZDpndWFyZGlhbl9lbnJvbGxtZW50cyByZWFkOnVzZXJfaWRwX3Rva2VucyByZWFkOmN1c3RvbV9kb21haW5zIHJlYWQ6ZW1haWxfdGVtcGxhdGVzIHJlYWQ6bWZhX3BvbGljaWVzIHJlYWQ6cm9sZXMgcmVhZDpwcm9tcHRzIHJlYWQ6YnJhbmRpbmcgcmVhZDpsb2dfc3RyZWFtcyByZWFkOnNpZ25pbmdfa2V5cyByZWFkOmxpbWl0cyByZWFkOnJvbGVfbWVtYmVycyByZWFkOmVudGl0bGVtZW50cyIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.WFHRljGhYYk4qMC361MkZ8azL6gtYKQAa8XBvdcca7h9k2LGWhPVRP3djnYHn1xyaiexSc9poyFvy-rHTWbGeTjCGfOf8_lnFVxsA4SxErSX2osY32mNNuoCCL6kf7gQyECbV8gtundVPHnqvVDnTIOrye4weBfdTPJlce18G5L-mktFwxNSFu4nWdpIW-zfFJhjJPNtUrZNAxinxjipiRJyTudEWVZzRttYsl1rBJ7pM1oSRz4derS-Zfw1N7eNyTIv5hro6z_gvs5PjlEIg112-qPRf1X1ghAWnMw-ZE2motI6qZRal13cS-sVqqr3XHYaFNOoQDvja-u3hsAKGA";
+        String json = "{ \"access_token\": \"" + tokenValue + "\", \"token_type\": \"" + TOKEN_TYPE + "\" }";
+
+        Auth0token auth0token = new ObjectMapper().readValue(json, Auth0token.class);
+        assertEquals(new Auth0token(tokenValue, TOKEN_TYPE), auth0token);
+    }
+}
