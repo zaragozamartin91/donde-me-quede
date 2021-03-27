@@ -36,6 +36,11 @@
                     </li>
                     <!-- / Login button -->
 
+                    <!-- Signup button: show if NOT authenticated -->
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a th:href="@{/oauth2/authorization/auth0}" id="qsSignupBtn" class="btn btn-primary btn-block">Signup</a>
+                    </li>
+
                     <!-- Fullsize dropdown: show if authenticated -->
                     <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                         <a
@@ -67,6 +72,11 @@
                     <a th:href="@{/oauth2/authorization/auth0}" id="qsLoginBtn" class="btn btn-primary btn-block">Login</a>
                 </ul>
                 <!-- /Responsive login button -->
+
+                <!-- Responsive Signup button: show if NOT authenticated -->
+                <ul sec:authorize="!isAuthenticated()" class="navbar-nav d-md-none">
+                    <a th:href="@{/oauth2/authorization/auth0}" id="qsSignupBtn" class="btn btn-primary btn-block">Signup</a>
+                </ul>
 
                 <!-- Responsive profile dropdown: show if authenticated -->
                 <ul sec:authorize="isAuthenticated()" class="navbar-nav d-md-none justify-content-between" style="min-height: 120px;">

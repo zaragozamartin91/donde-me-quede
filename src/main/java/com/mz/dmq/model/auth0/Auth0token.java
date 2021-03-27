@@ -20,4 +20,8 @@ public class Auth0token {
 
     private String accessToken;
     private String tokenType;
+
+    public String toAuthorization() {
+        return String.format("%s %s", getTokenType(), getAccessToken());
+    }
 }
