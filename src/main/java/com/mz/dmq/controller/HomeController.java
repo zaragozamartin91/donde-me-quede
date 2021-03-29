@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Optional;
+
 /**
  * Controller for the home page.
  */
@@ -14,9 +16,17 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, @AuthenticationPrincipal OidcUser principal) {
-        if (principal != null) {
-            model.addAttribute("profile", principal.getClaims());
-        }
+        Optional.ofNullable(principal)
+                .map(OidcUser::getClaims)
+                .ifPresent(c -> model.addAttribute("profile", c));
         return "index";
+    }
+
+    @GetMapping("/poc")
+    public String poc(Model model, @AuthenticationPrincipal OidcUser principal) {
+        Optional.ofNullable(principal)
+                .map(OidcUser::getClaims)
+                .ifPresent(c -> model.addAttribute("profile", c));
+        return "poc-grid-materialize";
     }
 }
