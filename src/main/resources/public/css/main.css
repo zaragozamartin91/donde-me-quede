@@ -1,10 +1,22 @@
 /* NAVBAR */
 
+body {
+    background-image: url('/images/body_trans_background.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
 .mz-brand-logo {
     margin-left: 10px;
 }
 
 /* INDEX */
+
+#indexCardTitle {
+    color: black;
+    font-weight: bold;
+}
 
 .mz-content {
     padding: 10px;
