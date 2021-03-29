@@ -1,0 +1,23 @@
+/* NAVBAR */
+
+.mz-brand-logo {
+    margin-left: 10px;
+}
+
+/* INDEX */
+
+.mz-content {
+    padding: 10px;
+}
+
+.mz-card {
+    margin: auto;
+    width: 70%;
+}
+
+@media all and (max-width: 600px) {
+    .card {
+        width: 80%;
+    }
+}
+

@@ -10,24 +10,34 @@
 
 <div class="nav-container mb-3" th:fragment="navbar">
     <ul id="profile-dropdown" class="dropdown-content">
-        <li><a href="/profile" class="dropdown-item dropdown-profile"><i class="fas fa-user mr-3"></i> Profile</a></li>
-        <li class="nav-item"><a th:href="@{/logout}">Cerrar sesion</a></li>
+        <li class="nav-item"><a th:href="@{/profile}" th:text="#{profile}">Profile</a></li>
+        <li class="nav-item"><a th:href="@{/logout}" th:text="#{logout}">Cerrar sesion</a></li>
+    </ul>
+
+    <ul class="sidenav" id="navbar-sidenav">
+        <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/profile}" th:text="#{profile}">Profile</a></li>
+        <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/logout}" th:text="#{logout}">Cerrar sesion</a></li>
+        <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/books}" th:text="#{readings}">Lecturas</a></li>
+        <li sec:authorize="!isAuthenticated()" class="nav-item"><a th:href="@{/oauth2/authorization/auth0}"><span th:text="#{login}"></span></a></li>
+        <li sec:authorize="!isAuthenticated()" class="nav-item"><a th:href="@{/users/signup}"><span th:text="#{signup}"></span></a></li>
     </ul>
 
     <nav id="navbar-nav">
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo">Donde me quede</a>
+            <a th:href="@{/}" class="brand-logo mz-brand-logo">Donde me quede</a>
+            <a href="#" data-target="navbar-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
-            <ul sec:authorize="!isAuthenticated()" id="nav-mobile" class="right hide-on-med-and-down">
-                <li class="nav-item"><a th:href="@{/oauth2/authorization/auth0}"><span th:text="#{login}"></span></a></li>
-                <li class="nav-item"><a th:href="@{/users/signup}"><span th:text="#{signup}"></span></a></li>
-            </ul>
-
-            <ul sec:authorize="isAuthenticated()" id="nav-mobile" class="right hide-on-med-and-down">
-                <li class="nav-item"><a th:href="@{/books}">Lecturas</a></li>
-                <li><a class="dropdown-trigger" href="#!" data-target="profile-dropdown">
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/books}" th:text="#{readings}">Lecturas</a></li>
+                <li sec:authorize="isAuthenticated()"><a class="dropdown-trigger" href="#!" data-target="profile-dropdown">
                     <span th:text="${profile.get('nickname')}"></span>
                     <i class="material-icons right">arrow_drop_down</i>
+                </a></li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item"><a th:href="@{/oauth2/authorization/auth0}">
+                    <span th:text="#{login}"></span>
+                </a></li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item"><a th:href="@{/users/signup}">
+                    <span th:text="#{signup}"></span>
                 </a></li>
             </ul>
         </div>
