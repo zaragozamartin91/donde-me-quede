@@ -14,7 +14,8 @@ body {
 /* INDEX */
 
 #indexCardTitle {
-    color: black;
+    color: white;
+    mix-blend-mode: difference;
     font-weight: bold;
 }
 
