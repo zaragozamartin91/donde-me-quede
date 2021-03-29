@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+
+    <meta charset="UTF-8">
+    <title>Poc Grid Materialize</title>
+</head>
+
+<style>
+    .header {
+        background: tomato;
+        grid-area: header;
+    }
+
+    .main {
+        text-align: left;
+        background: deepskyblue;
+        grid-area: main;
+    }
+
+    .aside-1 {
+        background: gold;
+        grid-area: aside-1;
+    }
+
+    .aside-2 {
+        background: hotpink;
+        grid-area: aside-2;
+    }
+
+    .footer {
+        background: lightgreen;
+        grid-area: footer;
+    }
+
+    .wrapper {
+        font-weight: bold;
+        text-align: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+            "header header header header"
+            "aside-1 main main aside-2"
+            "footer footer footer footer";
+    }
+
+    @media all and (max-width: 800px) {
+        .wrapper {
+            grid-template-areas:
+            "header header header header"
+            "main main main main"
+            "aside-1 aside-1 aside-2 aside-2"
+            "footer footer footer footer";
+        }
+    }
+
+    @media all and (max-width: 600px) {
+        .wrapper {
+            grid-template-areas:
+            "header header header header"
+            "main main main main"
+            "aside-1 aside-1 aside-1 aside-1"
+            "aside-2 aside-2 aside-2 aside-2"
+            "footer footer footer footer";
+        }
+    }
+
+
+    body {
+        padding: 2em;
+    }
+
+</style>
+
+<body>
+
+
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Logo</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="sass.html">Sass</a></li>
+            <li><a href="badges.html">Components</a></li>
+            <li><a href="collapsible.html">JavaScript</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="wrapper">
+    <header class="header">Header</header>
+    <article class="main">
+        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum
+            tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas
+            semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+    </article>
+    <aside class="aside aside-1">Aside 1</aside>
+    <aside class="aside aside-2">Aside 2</aside>
+    <footer class="footer">Footer</footer>
+</div>
+
+</body>
+</html>
