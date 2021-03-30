@@ -18,6 +18,9 @@
         $(document).ready(function () {
             $(".dropdown-trigger").dropdown();
             $('.sidenav').sidenav();
+
+            let tp = $('.timepicker');
+            if (tp) tp.timepicker({twelveHour: false, defaultTime: '00:00'});
         })
     </script>
 </section>
