@@ -38,7 +38,7 @@ body {
 
 .mz-form-card {
     /* Add shadows to create the "card" effect */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     padding: 16px;
     background-color: white;
@@ -46,5 +46,92 @@ body {
 
 /* On mouse-over, add a deeper shadow */
 .mz-form-card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.mz-card-title {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing: antialiased;
+    box-sizing: inherit;
+    font-size: 2.92rem;
+    line-height: 110%;
+    margin: 1.9466666667rem 0 1.168rem 0;
+    color: #ee6e73;
+    font-weight: 300;
+}
+
+/* create-reading FORM ------------------------------------------------------------------------------------------- */
+
+#create-reading-title-div {
+    grid-area: create-reading-title;
+}
+
+#create-reading-chapter-div {
+    grid-area: create-reading-chapter;
+}
+
+#create-reading-page-div {
+    grid-area: create-reading-page;
+}
+
+#create-reading-time-div {
+    grid-area: create-reading-time;
+}
+
+#create-reading-link-div {
+    grid-area: create-reading-link;
+}
+
+#create-reading-briefing-div {
+    grid-area: create-reading-briefing;
+}
+
+#create-reading-comments-div {
+    grid-area: create-reading-comments;
+}
+
+#create-reading-submit {
+    grid-area: create-reading-submit;
+}
+
+#create-reading {
+    width: 75%;
+    margin: auto;
+}
+
+#create-reading-form {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+            "create-reading-title create-reading-chapter"
+            "create-reading-page create-reading-time"
+            "create-reading-link create-reading-link"
+            "create-reading-briefing create-reading-briefing"
+            "create-reading-comments create-reading-comments"
+            "create-reading-submit create-reading-submit";
+}
+
+#create-reading-form .input-field {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+@media all and (max-width: 800px) {
+    #create-reading {
+        width: 100%;
+    }
+
+    #create-reading-form {
+        grid-template-areas:
+            "create-reading-title create-reading-title"
+            "create-reading-chapter create-reading-chapter"
+            "create-reading-page create-reading-page"
+            "create-reading-time create-reading-time"
+            "create-reading-link create-reading-link"
+            "create-reading-briefing create-reading-briefing"
+            "create-reading-comments create-reading-comments"
+            "create-reading-submit create-reading-submit";
+    }
 }
