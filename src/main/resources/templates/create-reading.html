@@ -7,48 +7,48 @@
 
     <div class="mz-content">
 
-        <div class="mz-form-card">
-            <h1 class="header">Agendar lectura</h1>
+        <div id="create-reading" class="mz-form-card">
+            <h3 class="mz-card-title">Agendar lectura</h3>
 
-            <div class="card-panel green lighten-4" th:if="${successMsg}">
-                <span th:text="${successMsg}"></span>
-            </div>
+            <div class="card-panel green lighten-4" th:if="${successMsg}"><span th:text="${successMsg}"></span></div>
 
             <!-- Campos titulo, capitulo, pagina(opcional), tiempo(opcional), sitio/enlace, briefing(opcional), opiniones(opcional) -->
-            <form th:action="@{/readings}" method="post" th:object="${reading}">
-                <div class="input-field">
-                    <input id="title" type="text" class="validate" th:field="*{title}" th:errorclass="invalid">
-                    <label for="title">Titulo</label>
+            <form id="create-reading-form" th:action="@{/readings}" method="post" th:object="${reading}">
+                <div id="create-reading-title-div" class="input-field">
+                    <input id="create-reading-title" type="text" class="validate" th:field="*{title}" th:errorclass="invalid">
+                    <label for="create-reading-title">Titulo</label>
                     <span class="helper-text red-text text-darken-2" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:text="${#fields.errors('title')}"></span>
                 </div>
-                <div class="input-field">
-                    <input id="chapter" type="text" class="validate" th:field="*{chapter}" th:errorclass="invalid">
-                    <label for="chapter">Capitulo</label>
+                <div id="create-reading-chapter-div" class="input-field">
+                    <input id="create-reading-chapter" type="text" class="validate" th:field="*{chapter}" th:errorclass="invalid">
+                    <label for="create-reading-chapter">Capitulo</label>
                     <span class="helper-text red-text text-darken-2" th:if="${#fields.hasErrors('chapter')}" th:errors="*{chapter}" th:text="${#fields.errors('chapter')}"></span>
                 </div>
-                <div class="input-field">
-                    <input id="pageNo" type="number" class="validate" th:field="*{page}" th:errorclass="invalid">
-                    <label for="pageNo">Pagina</label>
+                <div id="create-reading-page-div" class="input-field">
+                    <input id="create-reading-page" type="number" class="validate" th:field="*{page}" th:errorclass="invalid">
+                    <label for="create-reading-page">Pagina</label>
                     <span class="helper-text red-text text-darken-2" th:if="${#fields.hasErrors('page')}" th:errors="*{page}" th:text="${#fields.errors('page')}"></span>
                 </div>
-                <div class="input-field">
-                    <input id="timestamp" type="text" class="timepicker" th:field="*{time}" th:errorclass="invalid">
-                    <label for="timestamp">Minuto</label>
+                <div id="create-reading-time-div" class="input-field">
+                    <input id="create-reading-time" type="text" class="timepicker" th:field="*{time}" th:errorclass="invalid">
+                    <label for="create-reading-time">Minuto</label>
                 </div>
-                <div class="input-field">
-                    <input id="siteLink" type="text" class="validate" th:field="*{link}" th:errorclass="invalid">
-                    <label for="siteLink">Enlace</label>
+                <div id="create-reading-link-div" class="input-field">
+                    <input id="create-reading-link" type="text" class="validate" th:field="*{link}" th:errorclass="invalid">
+                    <label for="create-reading-link">Enlace</label>
                 </div>
-                <div class="input-field">
-                    <textarea id="briefing" class="materialize-textarea" th:field="*{briefing}" th:errorclass="invalid"></textarea>
-                    <label for="briefing">Briefing</label>
+                <div id="create-reading-briefing-div" class="input-field">
+                    <textarea id="create-reading-briefing" class="materialize-textarea" th:field="*{briefing}" th:errorclass="invalid"></textarea>
+                    <label for="create-reading-briefing">Briefing</label>
                 </div>
-                <div class="input-field">
-                    <textarea id="comments" class="materialize-textarea" th:field="*{comment}" th:errorclass="invalid"></textarea>
-                    <label for="comments">Opinion</label>
+                <div id="create-reading-comments-div" class="input-field">
+                    <textarea id="create-reading-comments" class="materialize-textarea" th:field="*{comment}" th:errorclass="invalid"></textarea>
+                    <label for="create-reading-comments">Opinion</label>
                 </div>
 
-                <button class="btn waves-effect waves-light" type="submit" name="action">Crear<i class="material-icons right">send</i></button>
+                <button id="create-reading-submit" class="btn waves-effect waves-light" type="submit" name="action">
+                    Crear<i class="material-icons right">send</i>
+                </button>
             </form>
         </div>
 
