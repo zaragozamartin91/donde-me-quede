@@ -1,13 +1,9 @@
 
 spring:
-  datasource:
-    url: jdbc:postgresql://${DB_HOST:192.168.99.102}:${DB_PORT:5432}/${DB_NAME:dmq}
-    driverClassName: org.postgresql.Driver
-    username: ${DB_USERNAME:dondemequede}
-    password: ${DB_PASSWORD:d0nd3m3qu3d3}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
       ddl-auto: ${DB_DDLAUTO:validate}
 
+# jdbc:postgresql://dondemequede:d0nd3m3qu3d3@192.168.99.102:5432/dmq
