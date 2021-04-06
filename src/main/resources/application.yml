@@ -4,6 +4,7 @@ logging:
     root: ERROR
     org.springframework.web: ERROR
     com.mz.dmq: TRACE
+    com.datical.liquibase: INFO
 
 spring:
   security:

@@ -36,6 +36,7 @@ dependencies {
     implementation group: 'io.projectreactor', name: 'reactor-core', version: '3.4.4'
     // https://mvnrepository.com/artifact/org.javatuples/javatuples
     implementation group: 'org.javatuples', name: 'javatuples', version: '1.2'
+    implementation 'org.liquibase:liquibase-core'
 
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
