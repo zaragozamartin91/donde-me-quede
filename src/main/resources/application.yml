@@ -31,3 +31,9 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   messages:
     basename: i18n/messages
+
+dmq:
+  wiki:
+    search:
+      limit: 2
+      extractChars: 64

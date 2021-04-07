@@ -1,12 +1,11 @@
 package com.mz.dmq.usecase.impl;
 
 import com.mz.dmq.model.reading.Title;
-import com.mz.dmq.repository.TitleRepository;
+import com.mz.dmq.repository.reading.TitleRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 import java.util.function.Function;

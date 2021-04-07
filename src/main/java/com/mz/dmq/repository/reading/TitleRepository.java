@@ -1,4 +1,4 @@
-package com.mz.dmq.repository;
+package com.mz.dmq.repository.reading;
 
 import com.mz.dmq.model.reading.Title;
 import org.springframework.data.jpa.repository.JpaRepository;
