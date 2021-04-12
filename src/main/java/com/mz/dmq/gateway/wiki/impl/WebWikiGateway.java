@@ -2,16 +2,18 @@ package com.mz.dmq.gateway.wiki.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mz.dmq.gateway.wiki.WikiGateway;
+import com.mz.dmq.model.wiki.WikiImage;
 import com.mz.dmq.model.wiki.WikiPage;
+import com.mz.dmq.model.wiki.WikiPageFragment;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -27,62 +29,92 @@ public class WebWikiGateway implements WikiGateway {
     }
 
     public List<WikiPage> searchByTitle(String title) {
+        log.info("Searching wiki pages for {}", title);
+
         /* Building the uri string this way to avoid "double url escape / expansion" */
-        String uriString = String.format(
-                "https://en.wikipedia.org/w/api.php?" +
+        String uriString = String.format("https://en.wikipedia.org/w/api.php?" +
                         "action=%s&generator=%s&gsrsearch=%s&gsrlimit=%d&prop=%s&exchars=%d&exintro&explaintext&format=%s&origin=%s",
                 "query", "search", title, searchLimit, "images|extracts|categories", extractChars, "json", "*");
 
-        /*
-         * https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=one_piece&gsrlimit=2&prop=images|extracts|categories&exchars=64&exintro&explaintext&exlimit=max&format=json&origin=*
-         * */
-
-//        String uriString = UriComponentsBuilder.fromHttpUrl("https://en.wikipedia.org/w/api.php")
-//                .queryParam("action", "query")
-//                .queryParam("generator", "search")
-//                .queryParam("gsrsearch", title)
-//                .queryParam("gsrlimit", searchLimit)
-//                .queryParam("prop", "images|extracts|categories")
-//                .queryParam("exchars", extractChars)
-//                .queryParam("exintro", true)
-//                .queryParam("explaintext", true)
-//                .queryParam("format", "json")
-//                .queryParam("origin", "*")
-//                .build(false)
-//                .toUri()
-//                .toString();
-
-        log.info("Raw uri string is {}", uriString);
-
-        WikiQueryResult result = new RestTemplate().getForObject(uriString, WikiQueryResult.class);
+        WikiPageQueryResult result = new RestTemplate().getForObject(uriString, WikiPageQueryResult.class);
         log.info("Result is {}", result);
 
-        return List.of();
+        return Optional.ofNullable(result)
+                .map(WikiPageQueryResult::getQuery)
+                .map(WikiPageQueryResult.WikiPageQueryInnerResult::getPages)
+                .map(Map::values)
+                .map(ArrayList::new)
+                .orElse(new ArrayList<>());
     }
 
+    public Optional<WikiImage> getImage(String name) {
+        log.info("Fetching image {}", name);
+
+        // https://en.wikipedia.org/w/api.php?action=query&titles=Image:Onepiece-welt (2).png&prop=imageinfo&iiprop=url&format=json
+        String uriString = String.format(
+                "https://en.wikipedia.org/w/api.php?action=query&titles=%s&prop=imageinfo&iiprop=url&format=json", name);
+
+        WikiImageQueryResult result = new RestTemplate().getForObject(uriString, WikiImageQueryResult.class);
+        log.info("Result is {}", result);
+
+        return Optional.ofNullable(result)
+                .map(WikiImageQueryResult::getQuery)
+                .map(WikiImageQueryResult.WikiImageQueryInnerResult::getPages)
+                .map(Map::values)
+                .flatMap(v -> v.stream().findFirst());
+    }
+
+
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @FieldDefaults(level = AccessLevel.PRIVATE)
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
     @ToString
-    static class WikiQueryResult {
-        WikiQueryInnerResult query;
-
+    static class WikiPageQueryResult {
+        private WikiPageQueryInnerResult query;
 
         @JsonIgnoreProperties(ignoreUnknown = true)
-        @FieldDefaults(level = AccessLevel.PRIVATE)
         @AllArgsConstructor
         @NoArgsConstructor
         @Getter
         @ToString
-        static class WikiQueryInnerResult {
-            Map<String, WikiPage> pages;
+        static class WikiPageQueryInnerResult {
+            private Map<String, WikiPage> pages;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @ToString
+    static class WikiImageQueryResult {
+        private WikiImageQueryInnerResult query;
+
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Getter
+        @ToString
+        static class WikiImageQueryInnerResult {
+            private Map<String, WikiImage> pages;
         }
     }
 
     public static void main(String[] args) {
         WebWikiGateway webWikiGateway = new WebWikiGateway(2, 64);
-        webWikiGateway.searchByTitle("One piece");
+        List<WikiPage> wikiPages = webWikiGateway.searchByTitle("kliasd");
+        System.out.println(wikiPages);
+
+        List<String> imageNames = wikiPages.stream()
+                .flatMap(w -> Optional.ofNullable(w.getImages()).stream())
+                .flatMap(Collection::stream)
+                .map(WikiPageFragment::getTitle)
+                .collect(Collectors.toList());
+
+        System.out.println(imageNames);
+
+        WikiImage wikiImage = imageNames.stream().findFirst().flatMap(webWikiGateway::getImage).orElseThrow();
+        System.out.println(wikiImage);
     }
 }

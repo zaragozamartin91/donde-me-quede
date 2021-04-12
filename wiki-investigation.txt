@@ -1,0 +1,36 @@
+Mediawiki api: https://www.mediawiki.org/w/api.php?action=help&modules=query
+
+----------------------------------------------------------------------------------------------------------------
+
+https://en.wikipedia.org/w/api.php?action=opensearch&search=Bear&limit=1&namespace=0&format=json
+
+https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${searchTerm}&gsrlimit=2&prop=pageimages|extracts&exchars=${maxChars}&exintro&explaintext&exlimit=max&format=json&origin=*
+
+
+https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=one_piece&gsrlimit=2&prop=pageimages|extracts|categories&exchars=700&exintro&explaintext&exlimit=max&format=json&origin=*
+
+// SEARCH CONTENT AND IMAGES
+
+esta query devuelve titulos + extractos + imagenes de un termino
+
+https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=one_piece&gsrlimit=2&prop=images|extracts|categories&exchars=64&exintro&explaintext&exlimit=max&format=json&origin=*
+
+esta query devuelve la informacion de una imagen obtenida con la anterior query
+
+https://en.wikipedia.org/w/api.php?action=query&titles=Image:One Piece, Volume 61 Cover (Japanese).jpg&prop=imageinfo&iiprop=url&format=json
+https://en.wikipedia.org/w/api.php?action=query&titles=Image:Onepiece-welt (2).png&prop=imageinfo&iiprop=url&format=json
+
+
+
+https://en.wikipedia.org/w/api.php?action=query&titles=one_piece&prop=images|extracts|categories&exchars=64&exintro&explaintext&exlimit=max&format=json&origin=*
+
+// realizar una busqueda en wikipedia directamente (no search)
+https://en.wikipedia.org//w/api.php?action=query&titles=One%20Piece&prop=extracts&exchars=175&format=json&explaintext&origin=*
+
+
+// esta query permite obtener los titulos vinculados con un termino
+https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=Dragon%20Ball&gsrlimit=4&prop=info&format=json&origin=*
+
+// esta query busca articulos que comiencen con la palabra indicada
+https://en.wikipedia.org/w/api.php?action=query&generator=allpages&gapprefix=One%20pie&prop=info&format=json&origin=*
+
