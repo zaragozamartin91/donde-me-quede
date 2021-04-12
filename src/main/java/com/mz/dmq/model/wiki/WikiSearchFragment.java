@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Builder
 @ToString
-public class WikiPageFragment {
+public class WikiSearchFragment {
     long ns;
     String title;
 }

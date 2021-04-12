@@ -37,7 +37,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.javatuples/javatuples
     implementation group: 'org.javatuples', name: 'javatuples', version: '1.2'
     implementation 'org.liquibase:liquibase-core'
-
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
