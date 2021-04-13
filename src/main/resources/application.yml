@@ -32,6 +32,9 @@ spring:
   messages:
     basename: i18n/messages
 
+  cache:
+    cache-names: suggestions
+
 dmq:
   wiki:
     search:

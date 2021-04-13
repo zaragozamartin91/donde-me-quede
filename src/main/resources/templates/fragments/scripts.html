@@ -15,12 +15,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <script>
+        const EMPTY_FUNC = () => {
+        }
+
+        function httpGetAsync(theUrl, callback) {
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState === 4 && xmlHttp.status === 200) callback(xmlHttp.responseText);
+            }
+            xmlHttp.open("GET", theUrl, true); // true for asynchronous
+            xmlHttp.send(null);
+        }
+
         $(document).ready(function () {
             $(".dropdown-trigger").dropdown();
             $('.sidenav').sidenav();
 
-            let tp = $('.timepicker');
-            if (tp) tp.timepicker({twelveHour: false, defaultTime: '00:00'});
+            let tp = $('.timepicker') || {timepicker: EMPTY_FUNC}; // initialize all timepickers
+            tp.timepicker({twelveHour: false, defaultTime: '00:00'});
+
+            // initialize create reading title autocomplete
+            let crt = $('#create-reading-title') || {on: EMPTY_FUNC, autocomplete: EMPTY_FUNC, val: EMPTY_FUNC}
+            let searchAvailable = true // flag to avoid performing many searches at once
+            let searchTimeout = null
+            crt.on('input', function () {
+                const titleRawVal = $(this).val()
+                console.log("Title is ", titleRawVal)
+
+                if (titleRawVal.length >= 3 && searchAvailable) {
+                    searchAvailable = false
+                    console.log("Looking suggestions for ", titleRawVal)
+                    httpGetAsync(`/suggestions/${titleRawVal}`, function (data) {
+                        console.log("Suggestions found: ", data);
+                        const suggestions = {}
+                        JSON.parse(data).forEach(v => suggestions[v] = null)
+                        crt.autocomplete({data: suggestions})
+                        crt.autocomplete('open')
+                        searchAvailable = true
+                    })
+                }
+            })
         })
     </script>
 </section>

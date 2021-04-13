@@ -38,6 +38,8 @@ dependencies {
     implementation group: 'org.javatuples', name: 'javatuples', version: '1.2'
     implementation 'org.liquibase:liquibase-core'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
