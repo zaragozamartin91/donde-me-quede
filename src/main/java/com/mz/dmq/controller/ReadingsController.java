@@ -1,7 +1,12 @@
 package com.mz.dmq.controller;
 
 import com.mz.dmq.model.reading.CreateReadingRequest;
+import com.mz.dmq.model.reading.Title;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
@@ -15,11 +20,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Slf4j
 @Controller
 @RequestMapping("/readings")
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ReadingsController {
+    Function<String, Title> storeTitleIfAbsent;
+
+    @Autowired
+    public ReadingsController(
+            @Qualifier("storeTitleIfAbsent") Function<String, Title> storeTitleIfAbsent) {
+        this.storeTitleIfAbsent = storeTitleIfAbsent;
+    }
+
     @ModelAttribute(name = "profile")
     public Map<String, Object> profile(@AuthenticationPrincipal OidcUser principal) {
         return Optional.ofNullable(principal).map(OidcUser::getClaims).orElseGet(Map::of);
@@ -45,6 +60,8 @@ public class ReadingsController {
                 e -> log.error("Found errors: {}", errors),
                 () -> {
                     log.info("Storing {}", reading);
+                    Title title = storeTitleIfAbsent.apply(reading.getTitle());
+                    log.info("New title is {}", title);
                     model.addAttribute("successMsg", "Lectura agendada");
                 });
         return "create-reading";
