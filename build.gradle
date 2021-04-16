@@ -39,6 +39,8 @@ dependencies {
     implementation 'org.liquibase:liquibase-core'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation 'com.github.ben-manes.caffeine:caffeine'
 
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
