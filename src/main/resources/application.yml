@@ -4,6 +4,7 @@ logging:
     root: ERROR
     org.springframework.web: ERROR
     com.mz.dmq: TRACE
+    com.datical.liquibase: INFO
 
 spring:
   security:
@@ -30,3 +31,15 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   messages:
     basename: i18n/messages
+
+  cache:
+    cache-names: suggestions
+
+  liquibase:
+    change-log: "classpath:db/changelog/changelog-master.xml"
+
+dmq:
+  wiki:
+    search:
+      limit: 2
+      extractChars: 64

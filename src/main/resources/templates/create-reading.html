@@ -15,7 +15,8 @@
             <!-- Campos titulo, capitulo, pagina(opcional), tiempo(opcional), sitio/enlace, briefing(opcional), opiniones(opcional) -->
             <form id="create-reading-form" th:action="@{/readings}" method="post" th:object="${reading}">
                 <div id="create-reading-title-div" class="input-field">
-                    <input id="create-reading-title" type="text" class="validate" th:field="*{title}" th:errorclass="invalid">
+                    <!-- Disabling browser autocomplete in favor of materialize autocomplete-->
+                    <input id="create-reading-title" type="text" class="autocomplete" th:field="*{title}" th:errorclass="invalid" autocomplete="off">
                     <label for="create-reading-title">Titulo</label>
                     <span class="helper-text red-text text-darken-2" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:text="${#fields.errors('title')}"></span>
                 </div>
