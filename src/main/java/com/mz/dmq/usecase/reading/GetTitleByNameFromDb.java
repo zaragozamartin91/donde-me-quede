@@ -1,4 +1,4 @@
-package com.mz.dmq.usecase.impl;
+package com.mz.dmq.usecase.reading;
 
 import com.mz.dmq.model.reading.Title;
 import com.mz.dmq.repository.reading.TitleRepository;

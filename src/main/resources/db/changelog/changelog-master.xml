@@ -9,4 +9,26 @@
             <column name="name" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="create-reading-table" author="martin">
+        <createTable tableName="reading">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="reading_pkey"/>
+            </column>
+            <column name="user" type="VARCHAR(255)" />
+            <column name="title_id" type="UUID" >
+                <constraints nullable="false" foreignKeyName="fk_title_id" references="title(id)" />
+            </column>
+            <column name="chapter" type="VARCHAR(64)" />
+            <column name="page" type="INT" />
+            <column name="time" type="TIME WITHOUT TIME ZONE" />
+            <column name="link" type="VARCHAR(255)" />
+            <column name="briefing" type="VARCHAR(255)" />
+            <column name="comment" type="VARCHAR(255)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="rename-reading-user-col" author="martin">
+        <renameColumn tableName="reading" oldColumnName="user" newColumnName="user_email" />
+    </changeSet>
 </databaseChangeLog>

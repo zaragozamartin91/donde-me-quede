@@ -1,7 +1,9 @@
 package com.mz.dmq.controller;
 
 import com.mz.dmq.model.reading.CreateReadingRequest;
+import com.mz.dmq.model.reading.Reading;
 import com.mz.dmq.model.reading.Title;
+import com.mz.dmq.util.TriFunction;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +30,14 @@ import java.util.function.Function;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ReadingsController {
     Function<String, Title> storeTitleIfAbsent;
+    TriFunction<String, Title, CreateReadingRequest, Reading> createReading;
 
     @Autowired
     public ReadingsController(
-            @Qualifier("storeTitleIfAbsent") Function<String, Title> storeTitleIfAbsent) {
+            @Qualifier("storeTitleIfAbsent") Function<String, Title> storeTitleIfAbsent,
+            @Qualifier("createReading") TriFunction<String, Title, CreateReadingRequest, Reading> createReading) {
         this.storeTitleIfAbsent = storeTitleIfAbsent;
+        this.createReading = createReading;
     }
 
     @ModelAttribute(name = "profile")
@@ -55,13 +60,17 @@ public class ReadingsController {
     public String createReading(
             @Valid @ModelAttribute(value = "reading") CreateReadingRequest reading,
             Errors errors,
-            Model model) {
+            Model model,
+            @AuthenticationPrincipal OidcUser oidcUser) {
         Optional.ofNullable(errors).filter(Errors::hasErrors).ifPresentOrElse(
                 e -> log.error("Found errors: {}", errors),
                 () -> {
                     log.info("Storing {}", reading);
                     Title title = storeTitleIfAbsent.apply(reading.getTitle());
-                    log.info("New title is {}", title);
+                    log.info("Title is {}", title);
+                    // it would be weird id no email is found... throw an error in that case
+                    Object email = Optional.of(oidcUser).map(OidcUser::getClaims).map(c -> c.get("email")).orElseThrow();
+                    createReading.apply(email.toString(), title, reading);
                     model.addAttribute("successMsg", "Lectura agendada");
                 });
         return "create-reading";

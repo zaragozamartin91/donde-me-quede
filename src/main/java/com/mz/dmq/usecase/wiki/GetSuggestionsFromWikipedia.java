@@ -1,4 +1,4 @@
-package com.mz.dmq.usecase.impl;
+package com.mz.dmq.usecase.wiki;
 
 import com.mz.dmq.gateway.wiki.WikiGateway;
 import com.mz.dmq.model.wiki.WikiPage;
