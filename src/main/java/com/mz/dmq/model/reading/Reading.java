@@ -4,7 +4,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -25,4 +27,10 @@ public class Reading {
     String link;
     String briefing;
     String comment;
+    Instant createDate;
+
+    @PrePersist
+    private void prePersist() {
+        createDate = ZonedDateTime.now().toInstant();
+    }
 }
