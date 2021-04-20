@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div id="page" layout:fragment="content">
+
+<!--    main content div-->
+    <div class="mz-content">
+
+
+        <div class="reading-card">
+            <div class="reading-card-img">
+                <img th:src="@{/images/img_avatar.png}" alt="Avatar" />
+            </div>
+            <div class="reading-card-img">
+                <img th:src="@{/images/img_avatar2.png}" alt="Avatar" />
+            </div>
+
+            <div class="reading-card-container">
+                <h4><b>John Doe</b></h4>
+                <p>Architect & Engineer</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

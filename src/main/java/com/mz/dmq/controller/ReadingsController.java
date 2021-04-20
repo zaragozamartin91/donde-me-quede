@@ -75,4 +75,9 @@ public class ReadingsController {
                 });
         return "create-reading";
     }
+
+    @GetMapping
+    public String myReadings() {
+        return "my-readings";
+    }
 }
