@@ -146,9 +146,9 @@ body {
 
 .reading-card-img img {
     margin: auto;
+
     max-width: 100%;
     height: auto;
-    /*width: 100px;*/
 }
 
 .reading-card {
@@ -157,13 +157,27 @@ body {
     transition: 0.3s;
     background-color: white;
 
-    width: 100%;
+    width: 50%;
     display: grid;
     padding: 1vw;
     grid-template-columns: [first] 1fr [end] 1fr;
     grid-template-rows: auto;
-    margin-bottom: 1vh;
-    margin-top: 1vh;
+
+    margin: 1vh auto 1vh auto;
+    /*margin-bottom: 1vh;*/
+    /*margin-top: 1vh;*/
+}
+
+@media all and (max-width: 1200px) {
+    .reading-card {
+        width: 75%;
+    }
+}
+
+@media all and (max-width: 800px) {
+    .reading-card {
+        width: 100%;
+    }
 }
 
 /* On mouse-over, add a deeper shadow */
