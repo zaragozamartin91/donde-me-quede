@@ -21,12 +21,4 @@ public class HomeController {
                 .ifPresent(c -> model.addAttribute("profile", c));
         return "index";
     }
-
-    @GetMapping("/poc")
-    public String poc(Model model, @AuthenticationPrincipal OidcUser principal) {
-        Optional.ofNullable(principal)
-                .map(OidcUser::getClaims)
-                .ifPresent(c -> model.addAttribute("profile", c));
-        return "poc-grid-materialize";
-    }
 }

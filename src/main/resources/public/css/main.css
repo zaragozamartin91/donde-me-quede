@@ -25,12 +25,12 @@ body {
 
 .mz-card {
     margin: auto;
-    width: 55%;
+    width: 70vw;
 }
 
 @media all and (max-width: 600px) {
     .card {
-        width: 80%;
+        width: 80vw;
     }
 }
 

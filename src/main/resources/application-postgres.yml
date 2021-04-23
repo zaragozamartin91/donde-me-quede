@@ -1,0 +1,11 @@
+
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+  liquibase:
+    change-log: "classpath:db/changelog/changelog-master.xml"
+
+
+# jdbc:postgresql://dondemequede:d0nd3m3qu3d3@192.168.99.102:5432/dmq
