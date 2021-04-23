@@ -138,15 +138,13 @@ body {
 
 /* my-readings ------------------------------------------------------------------------------------------------ */
 
-.reading-card-img {
+.reading-card-header {
     display: flex;
-    justify-content: center;
     align-items: center;
 }
 
-.reading-card-img img {
+.reading-card-img {
     margin: auto;
-
     max-width: 100%;
     height: auto;
 }
@@ -186,7 +184,7 @@ body {
 }
 
 /* Add some padding inside the card container */
-.reading-card-container {
+.reading-card-content {
     padding: 2px 16px;
     grid-column-start: first;
     grid-column-end: end;

@@ -9,14 +9,12 @@
     <div class="mz-content">
 
         <div class="reading-card" th:each="reading : ${readings}">
-            <div class="reading-card-img">
-                <img th:src="@{/images/img_avatar.png}" alt="Avatar"/>
-            </div>
-            <div class="reading-card-img">
-                <img th:src="@{/images/img_avatar2.png}" alt="Avatar"/>
+            <div class="reading-card-header">
+                <img class="reading-card-img" th:src="@{/images/img_avatar.png}" alt="Avatar"/>
+                <img class="reading-card-img" th:src="@{/images/img_avatar2.png}" alt="Avatar"/>
             </div>
 
-            <div class="reading-card-container">
+            <div class="reading-card-content">
                 <h4><b th:text="${reading.titleName}">Title</b></h4>
                 <p><span>Chapter </span><span th:text="${reading.chapter}">Last episode</span></p>
                 <p th:if="${reading.time}"><span>Time </span><span th:text="${reading.time}">Hour:Minute</span></p>
