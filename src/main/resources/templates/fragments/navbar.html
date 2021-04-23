@@ -18,6 +18,7 @@
     <!-- Dropdown lecturas -->
     <ul id="readings-dropdown" class="dropdown-content">
         <li class="nav-item"><a th:href="@{/readings/new}" th:text="#{createReading}">Create reading</a></li>
+        <li class="nav-item"><a th:href="@{/readings}" th:text="#{myReadings}">My readings</a></li>
     </ul>
 
     <!-- Navegacion de menu lateral para dispositivos mobile -->
@@ -25,8 +26,9 @@
         <!-- Navegaciones para usuarios autenticados -->
         <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/profile}" th:text="#{profile}">Profile</a></li>
         <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/logout}" th:text="#{logout}">Cerrar sesion</a></li>
-        <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/books}" th:text="#{readings}">Lecturas</a></li>
+        <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/readings}" th:text="#{readings}">My readings</a></li>
         <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/readings/new}" th:text="#{createReading}">Create reading</a></li>
+        <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/readings}" th:text="#{myReadings}">My readings</a></li>
 
         <!-- Navegaciones para usuarios NO autenticados -->
         <li sec:authorize="!isAuthenticated()" class="nav-item"><a th:href="@{/oauth2/authorization/auth0}"><span th:text="#{login}"></span></a></li>

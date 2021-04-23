@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -19,4 +20,8 @@ public class WikiImage {
     String title;
     String imagerepository;
     @JsonProperty("imageinfo") List<WikiImageInfo> imageinfo;
+
+    public List<String> getImageUrls() {
+        return getImageinfo().stream().map(WikiImageInfo::getUrl).collect(Collectors.toList());
+    }
 }

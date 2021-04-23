@@ -18,18 +18,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class WebWikiGateway implements WikiGateway {
-    private final long searchLimit;
     private final long extractChars;
 
     public WebWikiGateway(
             @Value("${dmq.wiki.search.limit}") long searchLimit,
             @Value("${dmq.wiki.search.extractChars}") long extractChars) {
-        this.searchLimit = searchLimit;
         this.extractChars = extractChars;
     }
 
     @Override
-    public List<WikiSearch> searchByTitle(String title) {
+    public List<WikiSearch> searchByTitle(String title, int searchLimit) {
         log.info("Searching wiki pages for {}", title);
 
         /* Building the uri string this way to avoid "double url escape / expansion" */
@@ -143,7 +141,9 @@ public class WebWikiGateway implements WikiGateway {
 
     public static void main(String[] args) {
         WebWikiGateway webWikiGateway = new WebWikiGateway(2, 64);
-        List<WikiSearch> wikiSearches = webWikiGateway.searchByTitle("One piece");
+        String title = "One piece";
+        List<WikiSearch> wikiSearches = webWikiGateway.searchByTitle(title, 1);
+        System.out.println("Searches for " + title);
         System.out.println(wikiSearches);
 
         List<String> imageNames = wikiSearches.stream()
@@ -152,9 +152,11 @@ public class WebWikiGateway implements WikiGateway {
                 .map(WikiSearchFragment::getTitle)
                 .collect(Collectors.toList());
 
+        System.out.println("Images for " + title);
         System.out.println(imageNames);
 
         WikiImage wikiImage = imageNames.stream().findFirst().flatMap(webWikiGateway::getImage).orElseThrow();
+        System.out.println("Wiki image url for " + title);
         System.out.println(wikiImage);
 
         List<WikiPage> suggestions = webWikiGateway.getSuggestions("One pie");
