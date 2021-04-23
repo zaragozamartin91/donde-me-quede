@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WikiGateway {
-    List<WikiSearch> searchByTitle(String title);
+    List<WikiSearch> searchByTitle(String title, int searchLimit);
 
     Optional<WikiImage> getImage(String name);
 

@@ -39,6 +39,8 @@ spring:
     change-log: "classpath:db/changelog/changelog-master.xml"
 
 dmq:
+  reading:
+    pagesize: 10
   wiki:
     search:
       limit: 2

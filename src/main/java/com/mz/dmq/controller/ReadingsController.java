@@ -2,6 +2,7 @@ package com.mz.dmq.controller;
 
 import com.mz.dmq.model.reading.CreateReadingRequest;
 import com.mz.dmq.model.reading.Reading;
+import com.mz.dmq.model.reading.ReadingValue;
 import com.mz.dmq.model.reading.Title;
 import com.mz.dmq.util.TriFunction;
 import lombok.AccessLevel;
@@ -14,15 +15,15 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -31,13 +32,16 @@ import java.util.function.Function;
 public class ReadingsController {
     Function<String, Title> storeTitleIfAbsent;
     TriFunction<String, Title, CreateReadingRequest, Reading> createReading;
+    BiFunction<String, Integer, List<Reading>> getReadingsByUser;
 
     @Autowired
     public ReadingsController(
             @Qualifier("storeTitleIfAbsent") Function<String, Title> storeTitleIfAbsent,
-            @Qualifier("createReading") TriFunction<String, Title, CreateReadingRequest, Reading> createReading) {
+            @Qualifier("createReading") TriFunction<String, Title, CreateReadingRequest, Reading> createReading,
+            @Qualifier("getReadingsByUser") BiFunction<String, Integer, List<Reading>> getReadingsByUser) {
         this.storeTitleIfAbsent = storeTitleIfAbsent;
         this.createReading = createReading;
+        this.getReadingsByUser = getReadingsByUser;
     }
 
     @ModelAttribute(name = "profile")
@@ -69,15 +73,37 @@ public class ReadingsController {
                     Title title = storeTitleIfAbsent.apply(reading.getTitle());
                     log.info("Title is {}", title);
                     // it would be weird id no email is found... throw an error in that case
-                    Object email = Optional.of(oidcUser).map(OidcUser::getClaims).map(c -> c.get("email")).orElseThrow();
-                    createReading.apply(email.toString(), title, reading);
+                    createReading.apply(getUserEmail(oidcUser), title, reading);
                     model.addAttribute("successMsg", "Lectura agendada");
                 });
         return "create-reading";
     }
 
     @GetMapping
-    public String myReadings() {
+    public String myReadings(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            Model model,
+            @AuthenticationPrincipal OidcUser oidcUser) {
+        String userEmail = getUserEmail(oidcUser);
+        List<Reading> readings = getReadingsByUser.apply(userEmail, page);
+        List<ReadingValue> readingValues = readings.stream().map(r ->
+                ReadingValue.builder()
+                        .briefing(r.getBriefing())
+                        .chapter(r.getChapter())
+                        .comment(r.getComment())
+                        .id(r.getId())
+                        .createDate(r.getCreateDate())
+                        .link(r.getLink())
+                        .time(r.getTime())
+                        .titleName(r.getTitle().getName())
+                        .userEmail(userEmail)
+                        .build()
+        ).collect(Collectors.toList());
+        model.addAttribute("readings", readingValues);
         return "my-readings";
+    }
+
+    private String getUserEmail(OidcUser oidcUser) {
+        return Optional.of(oidcUser).map(OidcUser::getClaims).map(c -> c.get("email")).orElseThrow().toString();
     }
 }

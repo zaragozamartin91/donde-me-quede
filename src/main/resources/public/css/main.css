@@ -162,6 +162,8 @@ body {
     padding: 1vw;
     grid-template-columns: [first] 1fr [end] 1fr;
     grid-template-rows: auto;
+    margin-bottom: 1vh;
+    margin-top: 1vh;
 }
 
 /* On mouse-over, add a deeper shadow */
