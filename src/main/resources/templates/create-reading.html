@@ -8,7 +8,7 @@
     <div class="mz-content">
 
         <div id="create-reading" class="mz-form-card">
-            <h3 class="mz-card-title">Agendar lectura</h3>
+            <h3 class="mz-card-title" th:text="#{createReading}">Agendar lectura</h3>
 
             <div class="card-panel green lighten-4" th:if="${successMsg}"><span th:text="${successMsg}"></span></div>
 
@@ -46,6 +46,8 @@
                     <textarea id="create-reading-comments" class="materialize-textarea" th:field="*{comment}" th:errorclass="invalid"></textarea>
                     <label for="create-reading-comments">Opinion</label>
                 </div>
+
+                <input type="hidden" id="create-reading-pageid" th:field="*{pageid}" value="0">
 
                 <button id="create-reading-submit" class="btn waves-effect waves-light" type="submit" name="action">
                     Crear<i class="material-icons right">send</i>

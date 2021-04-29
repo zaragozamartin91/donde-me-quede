@@ -8,6 +8,7 @@ import com.mz.dmq.util.TriFunction;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -30,18 +32,21 @@ import java.util.stream.Collectors;
 @RequestMapping("/readings")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ReadingsController {
-    Function<String, Title> storeTitleIfAbsent;
+    Function<Title, Title> storeTitleIfAbsent;
     TriFunction<String, Title, CreateReadingRequest, Reading> createReading;
     BiFunction<String, Integer, List<Reading>> getReadingsByUser;
+    Function<Title, List<String>> getTitleImages;
 
     @Autowired
     public ReadingsController(
-            @Qualifier("storeTitleIfAbsent") Function<String, Title> storeTitleIfAbsent,
+            @Qualifier("storeTitleIfAbsent") Function<Title, Title> storeTitleIfAbsent,
             @Qualifier("createReading") TriFunction<String, Title, CreateReadingRequest, Reading> createReading,
-            @Qualifier("getReadingsByUser") BiFunction<String, Integer, List<Reading>> getReadingsByUser) {
+            @Qualifier("getReadingsByUser") BiFunction<String, Integer, List<Reading>> getReadingsByUser,
+            @Qualifier("getTitleImages") Function<Title, List<String>> getTitleImages) {
         this.storeTitleIfAbsent = storeTitleIfAbsent;
         this.createReading = createReading;
         this.getReadingsByUser = getReadingsByUser;
+        this.getTitleImages = getTitleImages;
     }
 
     @ModelAttribute(name = "profile")
@@ -70,7 +75,7 @@ public class ReadingsController {
                 e -> log.error("Found errors: {}", errors),
                 () -> {
                     log.info("Storing {}", reading);
-                    Title title = storeTitleIfAbsent.apply(reading.getTitle());
+                    Title title = storeTitleIfAbsent.apply(new Title(reading.getTitle(), reading.getPageid()));
                     log.info("Title is {}", title);
                     // it would be weird id no email is found... throw an error in that case
                     createReading.apply(getUserEmail(oidcUser), title, reading);
@@ -86,19 +91,28 @@ public class ReadingsController {
             @AuthenticationPrincipal OidcUser oidcUser) {
         String userEmail = getUserEmail(oidcUser);
         List<Reading> readings = getReadingsByUser.apply(userEmail, page);
-        List<ReadingValue> readingValues = readings.stream().map(r ->
-                ReadingValue.builder()
-                        .briefing(r.getBriefing())
-                        .chapter(r.getChapter())
-                        .comment(r.getComment())
-                        .id(r.getId())
-                        .createDate(r.getCreateDate())
-                        .link(r.getLink())
-                        .time(r.getTime())
-                        .titleName(r.getTitle().getName())
-                        .userEmail(userEmail)
-                        .build()
+
+        Set<Title> titles = readings.stream().map(Reading::getTitle).collect(Collectors.toSet());
+
+        Map<Title, List<String>> imagesByTitle = titles
+                .parallelStream()
+                .map(t -> Pair.with(t, getTitleImages.apply(t)))
+                .collect(Collectors.toMap(Pair::getValue0, Pair::getValue1));
+
+        List<ReadingValue> readingValues = readings.parallelStream().map(r -> ReadingValue.builder()
+                .briefing(r.getBriefing())
+                .chapter(r.getChapter())
+                .comment(r.getComment())
+                .id(r.getId())
+                .createDate(r.getCreateDate())
+                .link(r.getLink())
+                .time(r.getTime())
+                .titleName(r.getTitleName())
+                .userEmail(userEmail)
+                .images(imagesByTitle.getOrDefault(r.getTitle(), List.of()))
+                .build()
         ).collect(Collectors.toList());
+
         model.addAttribute("readings", readingValues);
         return "my-readings";
     }
