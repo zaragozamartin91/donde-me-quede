@@ -39,6 +39,9 @@ spring:
     change-log: "classpath:db/changelog/changelog-master.xml"
 
 dmq:
+  images:
+    promoted: cover,poster
+    demoted: commons-logo
   reading:
     pagesize: 10
   wiki:

@@ -24,4 +24,5 @@ public class CreateReadingRequest {
     String link;
     String briefing;
     String comment;
+    long pageid; // wikipedia page id
 }

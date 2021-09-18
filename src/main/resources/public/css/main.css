@@ -141,21 +141,24 @@ body {
 .reading-card-header {
     display: flex;
     align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
 }
 
 .reading-card-img {
     margin: auto;
-    max-width: 100%;
+    max-width: 16vw;
     height: auto;
 }
 
+/* For big screens */
 .reading-card {
     /* Add shadows to create the "card" effect */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     background-color: white;
 
-    width: 50%;
+    width: 50vw;
     display: grid;
     padding: 1vw;
     grid-template-columns: [first] 1fr [end] 1fr;
@@ -166,15 +169,13 @@ body {
     /*margin-top: 1vh;*/
 }
 
-@media all and (max-width: 1200px) {
-    .reading-card {
-        width: 75%;
-    }
-}
-
 @media all and (max-width: 800px) {
     .reading-card {
-        width: 100%;
+        width: 96vw;
+    }
+
+    .reading-card-img {
+        max-width: 30vw;
     }
 }
 

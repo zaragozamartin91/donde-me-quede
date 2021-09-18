@@ -37,4 +37,10 @@
             <column name="create_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-pageid-2-title" author="martin">
+        <addColumn tableName="title">
+            <column name="pageid" type="INT" defaultValue="0" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

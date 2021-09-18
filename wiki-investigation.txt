@@ -32,5 +32,10 @@ https://en.wikipedia.org//w/api.php?action=query&titles=One%20Piece&prop=extract
 https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=Dragon%20Ball&gsrlimit=4&prop=info&format=json&origin=*
 
 // esta query busca articulos que comiencen con la palabra indicada
-https://en.wikipedia.org/w/api.php?action=query&generator=allpages&gapprefix=One%20pie&prop=info&format=json&origin=*
+https://en.wikipedia.org/w/api.php?action=query&list=prefixsearch&format=json&origin=*&pssearch=One%20pi
 
+----------------------------------
+
+// buqueda directa por titulo del articulo
+
+https://en.wikipedia.org/w/api.php?action=query&prop=images%7Cpageterms&titles=One%20Piece
