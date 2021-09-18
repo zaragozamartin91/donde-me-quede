@@ -33,4 +33,8 @@ public class Reading {
     private void prePersist() {
         createDate = ZonedDateTime.now().toInstant();
     }
+
+    public String getTitleName() {
+        return getTitle().getName();
+    }
 }

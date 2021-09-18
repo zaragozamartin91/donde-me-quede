@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -23,4 +24,5 @@ public class ReadingValue {
     String briefing;
     String comment;
     Instant createDate;
+    List<String> images;
 }

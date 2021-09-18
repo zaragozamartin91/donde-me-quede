@@ -9,7 +9,7 @@
         <div class="card mz-card">
             <div class="card-image">
                 <img th:src="@{/images/index_one_punch_man.jpg}" alt="One_piece">
-                <span class="card-title" id="indexCardTitle">Agendar lecturas</span>
+                <span class="card-title" id="indexCardTitle" th:text="#{createReading}">Agendar lecturas</span>
             </div>
             <div class="card-content">
                 <p>Usando DONDE ME QUEDE podes facilmente dejar marcadores online de tus lecturas. ¿En que capitulo me quede la ultima vez que lei
@@ -17,7 +17,7 @@
                     despues por titulo y calendario.</p>
             </div>
             <div class="card-action">
-                <a th:href="@{/readings/new}">Agendar una lectura</a>
+                <a th:href="@{/readings/new}" th:text="#{createReading}">Agendar una lectura</a>
             </div>
         </div>
     </div>

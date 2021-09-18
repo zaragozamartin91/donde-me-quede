@@ -10,14 +10,23 @@
 
         <div class="reading-card" th:each="reading : ${readings}">
             <div class="reading-card-header">
-                <img class="reading-card-img" th:src="@{/images/img_avatar.png}" alt="Avatar"/>
-                <img class="reading-card-img" th:src="@{/images/img_avatar2.png}" alt="Avatar"/>
+                <img class="reading-card-img" th:each="image : ${reading.images}" th:src="${image}" alt="Image"/>
             </div>
 
             <div class="reading-card-content">
                 <h4><b th:text="${reading.titleName}">Title</b></h4>
                 <p><span>Chapter </span><span th:text="${reading.chapter}">Last episode</span></p>
                 <p th:if="${reading.time}"><span>Time </span><span th:text="${reading.time}">Hour:Minute</span></p>
+                <p th:if="${reading.page}"><span>Page </span><span th:text="${reading.page}">PageNo</span></p>
+                <p th:if="${reading.link}"><span>Link </span>
+                    <a th:href="${reading.link}"><span th:text="${reading.link}">Reading link</span></a>
+                </p>
+                <p th:if="${reading.briefing}">
+                    <span>Briefing: </span><span th:text="${reading.briefing}">Reading briefing</span>
+                </p>
+                <p th:if="${reading.comment}">
+                    <cite th:text="${reading.comment}">Reading comments</cite>
+                </p>
             </div>
         </div>
 

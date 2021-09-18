@@ -26,7 +26,6 @@
         <!-- Navegaciones para usuarios autenticados -->
         <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/profile}" th:text="#{profile}">Profile</a></li>
         <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/logout}" th:text="#{logout}">Cerrar sesion</a></li>
-        <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/readings}" th:text="#{readings}">My readings</a></li>
         <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/readings/new}" th:text="#{createReading}">Create reading</a></li>
         <li sec:authorize="isAuthenticated()" class="nav-item"><a th:href="@{/readings}" th:text="#{myReadings}">My readings</a></li>
 

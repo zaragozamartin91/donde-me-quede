@@ -41,4 +41,10 @@
     <changeSet id="rename-reading-email-col" author="martin">
         <renameColumn tableName="reading" oldColumnName="user_email" newColumnName="reader_id" />
     </changeSet>
+
+    <changeSet id="add-pageid-2-title" author="martin">
+        <addColumn tableName="title">
+            <column name="pageid" type="INT" defaultValue="0" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

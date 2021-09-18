@@ -2,11 +2,14 @@ package com.mz.dmq.gateway.wiki.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mz.dmq.gateway.wiki.WikiGateway;
+import com.mz.dmq.model.reading.ReadingSuggestion;
 import com.mz.dmq.model.wiki.WikiImage;
-import com.mz.dmq.model.wiki.WikiPage;
 import com.mz.dmq.model.wiki.WikiSearch;
 import com.mz.dmq.model.wiki.WikiSearchFragment;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -47,12 +50,34 @@ public class WebWikiGateway implements WikiGateway {
     }
 
     @Override
-    public Optional<WikiImage> getImage(String name) {
-        log.info("Fetching image {}", name);
+    public Optional<WikiSearch> findByPageid(long pageid) {
+        // https://en.wikipedia.org//w/api.php?action=query&pageids=360759&prop=extracts|images&exchars=175&format=json&explaintext&origin=*
+
+        log.info("Searching for page {}", pageid);
+
+        String uriString = String.format("https://en.wikipedia.org/w/api.php?" +
+                        "action=query&pageids=%d&prop=extracts|images&exchars=%d&format=json&explaintext&origin=*",
+                pageid, extractChars);
+//24653
+        WikiSearchQueryResult result = new RestTemplate().getForObject(uriString, WikiSearchQueryResult.class);
+        log.info("Result is {}", result);
+
+        return Optional.ofNullable(result)
+                .map(WikiSearchQueryResult::getQuery)
+                .map(WikiSearchQueryResult.WikiPageQueryInnerResult::getPages)
+                .map(p -> p.get(String.valueOf(pageid)));
+    }
+
+    @Override
+    public List<WikiImage> getImageUrls(List<String> imgFileNames) {
+        log.info("Fetching images for {}", imgFileNames);
+
+        String imgNameParam = String.join("|", imgFileNames);
 
         // https://en.wikipedia.org/w/api.php?action=query&titles=Image:Onepiece-welt (2).png&prop=imageinfo&iiprop=url&format=json
         String uriString = String.format(
-                "https://en.wikipedia.org/w/api.php?action=query&titles=%s&prop=imageinfo&iiprop=url&format=json", name);
+                "https://en.wikipedia.org/w/api.php?action=query&titles=%s&prop=imageinfo&iiprop=url&format=json",
+                imgNameParam);
 
         WikiImageQueryResult result = new RestTemplate().getForObject(uriString, WikiImageQueryResult.class);
         log.info("Result is {}", result);
@@ -61,27 +86,38 @@ public class WebWikiGateway implements WikiGateway {
                 .map(WikiImageQueryResult::getQuery)
                 .map(WikiImageQueryResult.WikiImageQueryInnerResult::getPages)
                 .map(Map::values)
-                .flatMap(v -> v.stream().findFirst());
+                .map(List::copyOf)
+                .orElse(List.of());
     }
 
+    // todo: create custom class for results
     @Override
-    public List<WikiPage> getSuggestions(String title) {
+    public List<ReadingSuggestion> getSuggestions(String title) {
         log.info("Fetching suggestions for {}", title);
 
+        // https://en.wikipedia.org/w/api.php?action=query&list=prefixsearch&format=json&origin=*&pssearch=One%20pi
+
         String uriString = String.format(
-                "https://en.wikipedia.org/w/api.php?action=query&generator=allpages&gapprefix=%s&prop=info&format=json&origin=*",
+                "https://en.wikipedia.org/w/api.php?action=query&list=prefixsearch&format=json&origin=*&pssearch=%s",
                 title);
 
-        WikiPageQueryResult result = new RestTemplate().getForObject(uriString, WikiPageQueryResult.class);
+/*  "query": {
+        "prefixsearch": [
+          {
+            "ns": 0,
+            "title": "One Piece",
+            "pageid": 360759
+          },
+... */
+
+
+        WikiPrefixQueryResult result = new RestTemplate().getForObject(uriString, WikiPrefixQueryResult.class);
         log.info("Result is {}", result);
 
         return Optional.ofNullable(result)
-                .map(WikiPageQueryResult::getQuery)
-                .map(WikiPageQueryResult.WikiPageQueryInnerResult::getPages)
-                .map(Map::values)
-                .map(ArrayList::new)
+                .map(WikiPrefixQueryResult::getQuery)
+                .map(WikiPrefixQueryResult.WikiPrefixQueryInnerResult::getPrefixsearch)
                 .orElse(new ArrayList<>());
-
     }
 
 
@@ -121,26 +157,46 @@ public class WebWikiGateway implements WikiGateway {
         }
     }
 
+    /*  "query": {
+        "prefixsearch": [
+          {
+            "ns": 0,
+            "title": "One Piece",
+            "pageid": 360759
+          },
+... */
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
     @ToString
-    static class WikiPageQueryResult {
-        private WikiPageQueryInnerResult query;
+    static class WikiPrefixQueryResult {
+        private WikiPrefixQueryInnerResult query;
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         @AllArgsConstructor
         @NoArgsConstructor
         @Getter
         @ToString
-        static class WikiPageQueryInnerResult {
-            private Map<String, WikiPage> pages;
+        static class WikiPrefixQueryInnerResult {
+            private List<ReadingSuggestion> prefixsearch;
         }
     }
 
     public static void main(String[] args) {
         WebWikiGateway webWikiGateway = new WebWikiGateway(2, 64);
+
+//        List<ReadingSuggestion> suggestions = webWikiGateway.getSuggestions("one pie");
+//        System.out.println("Suggestions:");
+//        System.out.println(suggestions);
+
+        System.out.println("------------------------------------------------------------");
+        Optional<WikiSearch> searchByPageId = webWikiGateway.findByPageid(360759);
+        System.out.println(searchByPageId);
+    }
+
+    private static WebWikiGateway oldMain(WebWikiGateway webWikiGateway) {
         String title = "One piece";
         List<WikiSearch> wikiSearches = webWikiGateway.searchByTitle(title, 1);
         System.out.println("Searches for " + title);
@@ -155,11 +211,12 @@ public class WebWikiGateway implements WikiGateway {
         System.out.println("Images for " + title);
         System.out.println(imageNames);
 
-        WikiImage wikiImage = imageNames.stream().findFirst().flatMap(webWikiGateway::getImage).orElseThrow();
-        System.out.println("Wiki image url for " + title);
-        System.out.println(wikiImage);
+        List<WikiImage> wikiImages = webWikiGateway.getImageUrls(imageNames);
+        System.out.println("Wiki image urls for " + title);
+        System.out.println(wikiImages);
 
-        List<WikiPage> suggestions = webWikiGateway.getSuggestions("One pie");
+        List<ReadingSuggestion> suggestions = webWikiGateway.getSuggestions("One pie");
         System.out.println(suggestions);
+        return webWikiGateway;
     }
 }

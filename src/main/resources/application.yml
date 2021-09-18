@@ -45,6 +45,9 @@ spring.security.user.password: secret
 
 
 dmq:
+  images:
+    promoted: cover,poster
+    demoted: commons-logo
   reading:
     pagesize: 10
   wiki:
