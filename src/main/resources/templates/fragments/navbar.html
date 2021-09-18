@@ -48,7 +48,7 @@
                 </a></li>
 
                 <li sec:authorize="isAuthenticated()"><a class="dropdown-trigger" href="#!" data-target="profile-dropdown">
-                    <span th:text="${profile.get('nickname')}"></span>
+                    <span th:text="${profile.get('username')}"></span>
                     <i class="material-icons right">arrow_drop_down</i>
                 </a></li>
 

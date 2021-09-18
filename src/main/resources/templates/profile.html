@@ -10,11 +10,11 @@
             <div class="container">
                 <div class="row align-items-center profile-header">
                     <div class="col-md-2 mb-3">
-                        <img th:src="${profile.get('picture')}" class="rounded-circle img-fluid profile-picture"/>
+                        <img th:src="@{'img_avatar.png'}" class="rounded-circle img-fluid profile-picture"/>
                     </div>
                     <div class="col-md text-center text-md-left">
-                        <h2 th:text="${profile.get('name')}"/>
-                        <p class="lead text-muted" th:text="${profile.get('email')}"/>
+                        <h2 th:text="${profile.get('username')}"/>
+                        <p class="lead text-muted" th:text="${profile.get('username')}"/>
                     </div>
                 </div>
 

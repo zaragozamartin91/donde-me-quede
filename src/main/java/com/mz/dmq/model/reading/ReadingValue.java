@@ -7,14 +7,14 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.util.UUID;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReadingValue {
     UUID id;
-    String userEmail;
+    @Builder.Default String userEmail = "foo@bar.com";
     String titleName;
     String chapter;
     int page;

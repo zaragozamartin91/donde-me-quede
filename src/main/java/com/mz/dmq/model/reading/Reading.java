@@ -17,7 +17,7 @@ import java.util.UUID;
 @Builder
 public class Reading {
     @Id UUID id;
-    @Column(name = "user_email") String userEmail;
+    @Column(name = "reader_id") String readerId;
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "title_id")
     Title title;

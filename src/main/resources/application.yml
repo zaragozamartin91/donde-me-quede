@@ -7,21 +7,22 @@ logging:
     com.datical.liquibase: INFO
 
 spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          auth0:
-            client-id: ${AUTH0_CLIENT_ID}
-            client-secret: ${AUTH0_CLIENT_SECRET}
-            scope:
-              - openid
-              - profile
-              - email
-        provider:
-          auth0:
-            # trailing slash is important!
-            issuer-uri: https://mzaragoza.us.auth0.com/
+# UNCOMMENT TO ENABLE AUTH0
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          auth0:
+#            client-id: ${AUTH0_CLIENT_ID}
+#            client-secret: ${AUTH0_CLIENT_SECRET}
+#            scope:
+#              - openid
+#              - profile
+#              - email
+#        provider:
+#          auth0:
+#            # trailing slash is important!
+#            issuer-uri: https://mzaragoza.us.auth0.com/
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
@@ -37,6 +38,11 @@ spring:
 
   liquibase:
     change-log: "classpath:db/changelog/changelog-master.xml"
+
+
+spring.security.user.name: admin
+spring.security.user.password: secret
+
 
 dmq:
   reading:

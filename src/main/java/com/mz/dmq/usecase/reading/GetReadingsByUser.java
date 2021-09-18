@@ -31,6 +31,6 @@ public class GetReadingsByUser implements BiFunction<String, Integer, List<Readi
     @Transactional
     public List<Reading> apply(String email, Integer page) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        return readingRepository.findByUserEmailOrderByCreateDateDesc(email, pageable);
+        return readingRepository.findByReaderIdOrderByCreateDateDesc(email, pageable);
     }
 }

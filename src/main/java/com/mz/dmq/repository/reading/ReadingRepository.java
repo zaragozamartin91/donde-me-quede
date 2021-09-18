@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface ReadingRepository extends PagingAndSortingRepository<Reading, UUID> {
     @Query("FROM Reading as reading " +
             "JOIN FETCH reading.title " +
-            "WHERE reading.userEmail = :userEmail " +
+            "WHERE reading.readerId = :readerId " +
             "ORDER BY reading.createDate DESC ")
-    List<Reading> findByUserEmailOrderByCreateDateDesc(@Param("userEmail") String userEmail, Pageable pageable);
+    List<Reading> findByReaderIdOrderByCreateDateDesc(@Param("readerId") String readerId, Pageable pageable);
 }

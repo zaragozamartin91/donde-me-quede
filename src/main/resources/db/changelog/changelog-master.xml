@@ -37,4 +37,8 @@
             <column name="create_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="rename-reading-email-col" author="martin">
+        <renameColumn tableName="reading" oldColumnName="user_email" newColumnName="reader_id" />
+    </changeSet>
 </databaseChangeLog>

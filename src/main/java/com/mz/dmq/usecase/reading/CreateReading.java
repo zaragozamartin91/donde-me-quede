@@ -19,7 +19,7 @@ public class CreateReading implements TriFunction<String, Title, CreateReadingRe
     ReadingRepository readingRepository;
 
     @Override
-    public Reading apply(String email, Title title, CreateReadingRequest rr) {
+    public Reading apply(String readerId, Title title, CreateReadingRequest rr) {
         Reading reading = Reading.builder()
                 .chapter(rr.getChapter())
                 .id(UUID.randomUUID())
@@ -29,7 +29,7 @@ public class CreateReading implements TriFunction<String, Title, CreateReadingRe
                 .page(rr.getPage())
                 .time(rr.getTime())
                 .title(title)
-                .userEmail(email)
+                .readerId(readerId)
                 .build();
         return readingRepository.save(reading);
     }
