@@ -41,7 +41,7 @@ spring:
 dmq:
   images:
     promoted: cover,poster
-    demoted: commons-logo
+    demoted: commons-logo,Wikipe-tan_face,Symbol_category_class
   reading:
     pagesize: 10
   wiki:

@@ -4,6 +4,7 @@ import com.mz.dmq.model.reading.CreateReadingRequest;
 import com.mz.dmq.model.reading.Reading;
 import com.mz.dmq.model.reading.ReadingValue;
 import com.mz.dmq.model.reading.Title;
+import com.mz.dmq.model.user.UserProfile;
 import com.mz.dmq.util.TriFunction;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -11,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/readings")
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class ReadingsController {
+public class ReadingsController extends BaseController {
     Function<Title, Title> storeTitleIfAbsent;
     TriFunction<String, Title, CreateReadingRequest, Reading> createReading;
     BiFunction<String, Integer, List<Reading>> getReadingsByUser;
@@ -49,12 +48,6 @@ public class ReadingsController {
         this.getTitleImages = getTitleImages;
     }
 
-    @ModelAttribute(name = "profile")
-    public Map<String, Object> profile(@AuthenticationPrincipal OidcUser principal) {
-        return Optional.ofNullable(principal).map(OidcUser::getClaims).orElseGet(Map::of);
-    }
-
-
     @GetMapping("/new")
     public String createReadingForm(Model model) {
         model.addAttribute("reading", new CreateReadingRequest());
@@ -70,7 +63,7 @@ public class ReadingsController {
             @Valid @ModelAttribute(value = "reading") CreateReadingRequest reading,
             Errors errors,
             Model model,
-            @AuthenticationPrincipal OidcUser oidcUser) {
+            @ModelAttribute(name = "profile") UserProfile userProfile) {
         Optional.ofNullable(errors).filter(Errors::hasErrors).ifPresentOrElse(
                 e -> log.error("Found errors: {}", errors),
                 () -> {
@@ -78,7 +71,7 @@ public class ReadingsController {
                     Title title = storeTitleIfAbsent.apply(new Title(reading.getTitle(), reading.getPageid()));
                     log.info("Title is {}", title);
                     // it would be weird id no email is found... throw an error in that case
-                    createReading.apply(getUserEmail(oidcUser), title, reading);
+                    createReading.apply(userProfile.getEmail(), title, reading);
                     model.addAttribute("successMsg", "Lectura agendada");
                 });
         return "create-reading";
@@ -88,9 +81,8 @@ public class ReadingsController {
     public String myReadings(
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             Model model,
-            @AuthenticationPrincipal OidcUser oidcUser) {
-        String userEmail = getUserEmail(oidcUser);
-        List<Reading> readings = getReadingsByUser.apply(userEmail, page);
+            @ModelAttribute(name = "profile") UserProfile userProfile) {
+        List<Reading> readings = getReadingsByUser.apply(userProfile.getEmail(), page);
 
         Set<Title> titles = readings.stream().map(Reading::getTitle).collect(Collectors.toSet());
 
@@ -108,16 +100,12 @@ public class ReadingsController {
                 .link(r.getLink())
                 .time(r.getTime())
                 .titleName(r.getTitleName())
-                .userEmail(userEmail)
+                .userEmail(userProfile.getEmail())
                 .images(imagesByTitle.getOrDefault(r.getTitle(), List.of()))
                 .build()
         ).collect(Collectors.toList());
 
         model.addAttribute("readings", readingValues);
         return "my-readings";
-    }
-
-    private String getUserEmail(OidcUser oidcUser) {
-        return Optional.of(oidcUser).map(OidcUser::getClaims).map(c -> c.get("email")).orElseThrow().toString();
     }
 }
